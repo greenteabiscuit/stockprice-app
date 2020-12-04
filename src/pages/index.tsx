@@ -1,21 +1,43 @@
+import axios, { AxiosInstance } from 'axios'
+
 import Head from 'next/head'
+import { NextPage } from 'next'
+// React と NextPage を読み込む
+import React from 'react'
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+const getData = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  console.log("inside getdata")
+  let instance: AxiosInstance
+  instance = axios.create({
+    baseURL: 'https://www.alphavantage.co',
+  })
+
+  try {
+    const response = await instance.get('/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=C3VP04YVKEMNHV0U')
+    console.log(response)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Create Next App!</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <main className={styles.main}>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-
+        <input type="submit" onChange={getData} value="hello"/>
+        <button onClick={getData}>
+          Activate
+        </button>
         <p className={styles.description}>
-          Get started by editing{' '}
+          Get started bdfasdfsy editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
 
@@ -63,3 +85,6 @@ export default function Home() {
     </div>
   )
 }
+
+// export を分離
+export default Home
