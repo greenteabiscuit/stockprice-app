@@ -17,7 +17,7 @@ const Home: NextPage = () => {
     })
   
     try {
-      const response = await instance.get('/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=C3VP04YVKEMNHV0U')
+      const response = await instance.get('/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=' + process.env.APIKEY)
       console.log(response)
       console.log(response.data.bestMatches[0])
       response.data.bestMatches.forEach((element) => {
