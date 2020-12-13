@@ -1,27 +1,29 @@
+// React と NextPage を読み込む
+import React, {useState} from 'react'
 import axios, { AxiosInstance } from 'axios'
 
+import { Alert } from 'react-bootstrap'
 import Head from 'next/head'
 import { NextPage } from 'next'
-// React と NextPage を読み込む
-import React from 'react'
 import styles from '../styles/Home.module.css'
 
-const getData = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  console.log("inside getdata")
-  let instance: AxiosInstance
-  instance = axios.create({
-    baseURL: 'https://www.alphavantage.co',
-  })
-
-  try {
-    const response = await instance.get('/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=C3VP04YVKEMNHV0U')
-    console.log(response)
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 const Home: NextPage = () => {
+  const [showDownloadAPIDataSuccessAlert, setDownloadAPIDataSuccessAlert] = useState(false)
+  const getData = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("inside getdata")
+    let instance: AxiosInstance
+    instance = axios.create({
+      baseURL: 'https://www.alphavantage.co',
+    })
+  
+    try {
+      const response = await instance.get('/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=C3VP04YVKEMNHV0U')
+      console.log(response)
+      setDownloadAPIDataSuccessAlert(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className={styles.container}>
       <Head>
@@ -40,6 +42,14 @@ const Home: NextPage = () => {
           Get started bdfasdfsy editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
+        <Alert
+          variant="success"
+          show={showDownloadAPIDataSuccessAlert}
+          onClose={() => setDownloadAPIDataSuccessAlert(false)}
+          dismissible
+        >
+          データをダウンロードしました。
+        </Alert>
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
