@@ -1,31 +1,22 @@
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
-import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css'
 import BootstrapTable, { ColumnDescription } from 'react-bootstrap-table-next'
 import React, { FC } from 'react'
-import { Button } from 'react-bootstrap'
 
 type Props = {
-    ibmdata: any
-    showModalText: string
-    deleteText: string
+    ibmdatapoints: any
 }
 
-export const dataTable: FC<Props> = ({
-    ibmdata
-    showModalText,
-    deleteText,
+export const DataTable: FC<Props> = ({
+    ibmdatapoints,
 }) => (
     <BootstrapTable
         keyField="id"
-        data={ibmdata}
-        columns={getColumns(showModalText, deleteText,)}
+        data={ibmdatapoints}
+        columns={getColumns()}
         classes="table-sm"
     />
 )
 
 const getColumns = (
-    showModalText: string,
-    deleteText: string,
 ): ColumnDescription[] => [
     {
         dataField: 'code',

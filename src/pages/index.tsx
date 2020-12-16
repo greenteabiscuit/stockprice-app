@@ -3,13 +3,14 @@ import React, {useState} from 'react'
 import axios, { AxiosInstance } from 'axios'
 
 import { Alert } from 'react-bootstrap'
+import { DataTable } from '../../components/dataTable'
 import Head from 'next/head'
 import { NextPage } from 'next'
-import { dataTable } from '../../components/dataTable'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
   const [showDownloadAPIDataSuccessAlert, setDownloadAPIDataSuccessAlert] = useState(false)
+  const [dataForTable, setDataForTable] = useState([])
   const getData = async (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("inside getdata")
     let instance: AxiosInstance
@@ -19,10 +20,7 @@ const Home: NextPage = () => {
   
     try {
       const ibmdata: number[] = []
-      const response = await instance.get('/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=' + process.env.APIKEY)
-      console.log(response.data)
-      
-      console.log(response.data['Weekly Time Series'])      
+      const response = await instance.get('/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=' + process.env.APIKEY)    
       const weekly_data: Object[] = response.data['Weekly Time Series']
 
       Object.keys(weekly_data).map((key) => (
@@ -32,6 +30,7 @@ const Home: NextPage = () => {
       console.log(ibmdata)
       console.log(ibmdata.length)
       setDownloadAPIDataSuccessAlert(true)
+      setDataForTable(ibmdata)
     } catch (error) {
       console.log(error)
     }
@@ -51,6 +50,9 @@ const Home: NextPage = () => {
           Get started bdfasdfsy editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
+        <DataTable
+          ibmdatapoints={dataForTable}
+        />
 
         <Alert
           variant="success"
