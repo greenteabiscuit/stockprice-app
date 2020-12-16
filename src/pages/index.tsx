@@ -17,12 +17,14 @@ const Home: NextPage = () => {
     })
   
     try {
-      const response = await instance.get('/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=' + process.env.APIKEY)
-      console.log(response)
-      console.log(response.data.bestMatches[0])
-      response.data.bestMatches.forEach((element) => {
-        console.log(element['9. matchScore'])
-      })
+      const response = await instance.get('/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=' + process.env.APIKEY)
+      console.log(response.data)
+      
+      console.log(response.data['Weekly Time Series'])      
+      const weekly_data = response.data['Weekly Time Series']
+      console.log(weekly_data['1999-11-12'])
+      const nov12data = weekly_data['1999-11-12']
+      console.log(nov12data['2. high'])
       setDownloadAPIDataSuccessAlert(true)
     } catch (error) {
       console.log(error)
@@ -37,7 +39,7 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <input type="submit" onChange={getData} value="hello"/>
         <button onClick={getData}>
-          Activate
+          Get IBM Data
         </button>
         <p className={styles.description}>
           Get started bdfasdfsy editing{' '}
