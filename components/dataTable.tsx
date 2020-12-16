@@ -19,7 +19,7 @@ export const DataTable: FC<Props> = ({
 const getColumns = (
 ): ColumnDescription[] => [
     {
-        dataField: 'code',
+        dataField: 'dp',
         text: 'Code',
         align: 'right',
     },

@@ -9,8 +9,13 @@ import { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
+  type datagraph = {
+    id: Number
+    dp: Number
+  }
+  const alphaVantData : datagraph[] = []
   const [showDownloadAPIDataSuccessAlert, setDownloadAPIDataSuccessAlert] = useState(false)
-  const [dataForTable, setDataForTable] = useState([])
+  const [dataForTable, setDataForTable] = useState<datagraph[]>([])
   const getData = async (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("inside getdata")
     let instance: AxiosInstance
@@ -26,11 +31,15 @@ const Home: NextPage = () => {
       Object.keys(weekly_data).map((key) => (
         ibmdata.push(weekly_data[key]['2. high'])
       ))
+      Object.keys(weekly_data).forEach((value, key) => (
+        alphaVantData.push({id:key, dp:weekly_data[value]['2. high']})
+      ))
       console.log("ibm data")
       console.log(ibmdata)
       console.log(ibmdata.length)
+      console.log(alphaVantData)
       setDownloadAPIDataSuccessAlert(true)
-      setDataForTable(ibmdata)
+      setDataForTable(alphaVantData)
     } catch (error) {
       console.log(error)
     }
