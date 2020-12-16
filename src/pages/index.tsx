@@ -5,6 +5,7 @@ import axios, { AxiosInstance } from 'axios'
 import { Alert } from 'react-bootstrap'
 import Head from 'next/head'
 import { NextPage } from 'next'
+import { dataTable } from '../../components/dataTable'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
@@ -17,14 +18,19 @@ const Home: NextPage = () => {
     })
   
     try {
+      const ibmdata: number[] = []
       const response = await instance.get('/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=' + process.env.APIKEY)
       console.log(response.data)
       
       console.log(response.data['Weekly Time Series'])      
-      const weekly_data = response.data['Weekly Time Series']
-      console.log(weekly_data['1999-11-12'])
-      const nov12data = weekly_data['1999-11-12']
-      console.log(nov12data['2. high'])
+      const weekly_data: Object[] = response.data['Weekly Time Series']
+
+      Object.keys(weekly_data).map((key) => (
+        ibmdata.push(weekly_data[key]['2. high'])
+      ))
+      console.log("ibm data")
+      console.log(ibmdata)
+      console.log(ibmdata.length)
       setDownloadAPIDataSuccessAlert(true)
     } catch (error) {
       console.log(error)
@@ -45,6 +51,7 @@ const Home: NextPage = () => {
           Get started bdfasdfsy editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
+
         <Alert
           variant="success"
           show={showDownloadAPIDataSuccessAlert}
