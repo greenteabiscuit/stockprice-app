@@ -1,3 +1,5 @@
+import '../../node_modules/react-vis/dist/style.css';
+
 import { HorizontalGridLines, LineSeries, VerticalGridLines, XAxis, XYPlot, YAxis } from "react-vis";
 // React と NextPage を読み込む
 import React, {useState} from 'react'
@@ -42,7 +44,7 @@ const Home: NextPage = () => {
       console.log(ibmdata.length)
       console.log(alphaVantData)
       setDownloadAPIDataSuccessAlert(true)
-      setDataForTable(alphaVantData)
+      setDataForTable(alphaVantData.slice(1, 10))
       const randomdata: DataTypes[] = []
       Object.keys(weekly_data).map((key) => (
         randomdata.push({x:key, y:weekly_data[key]['2. high']})
@@ -65,7 +67,7 @@ const Home: NextPage = () => {
         <XYPlot width={800} height={400} xType="ordinal">
           <VerticalGridLines />
           <HorizontalGridLines />
-          <XAxis tickLabelAngle={-45} />
+          <XAxis tickLabelAngle={-30} style={{ticks: {fontSize: '10px', fontFamily: 'sans-serif'}}}/>
           <YAxis />
           <LineSeries data={dataReactVis} style={{ fill: 'none' }}/>
         </XYPlot>
