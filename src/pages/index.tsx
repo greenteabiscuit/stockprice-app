@@ -15,7 +15,7 @@ const Home: NextPage = () => {
     y: Number
   }
   interface DataTypes {
-    x: Number;
+    x: String;
     y: Number;
   }
   const alphaVantData : datagraph[] = []
@@ -44,11 +44,10 @@ const Home: NextPage = () => {
       setDownloadAPIDataSuccessAlert(true)
       setDataForTable(alphaVantData)
       const randomdata: DataTypes[] = []
-      Object.keys(weekly_data).map((value, key) => (
-        randomdata.push({x:key, y:weekly_data[value]['2. high']})
+      Object.keys(weekly_data).map((key) => (
+        randomdata.push({x:key, y:weekly_data[key]['2. high']})
       ))
-      console.log(randomdata.slice(1, 100))
-      setDataReactVis(randomdata.slice(1, 20))
+      setDataReactVis(randomdata.slice(1, 10).reverse())
     } catch (error) {
       console.log(error)
     }
@@ -63,17 +62,14 @@ const Home: NextPage = () => {
         <button onClick={getData}>
           Get IBM Data
         </button>
-        <p className={styles.description}>
-          Get started bdfasdfsy editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-        <XYPlot width={800} height={400}>
+        <XYPlot width={800} height={400} xType="ordinal">
           <VerticalGridLines />
           <HorizontalGridLines />
-          <XAxis />
+          <XAxis tickLabelAngle={-45} />
           <YAxis />
-          <LineSeries data={dataReactVis} />
+          <LineSeries data={dataReactVis} style={{ fill: 'none' }}/>
         </XYPlot>
+        <h2>Data For Table</h2>
         <DataTable
           ibmdatapoints={dataForTable}
         />
