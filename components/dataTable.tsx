@@ -9,7 +9,7 @@ export const DataTable: FC<Props> = ({
     ibmdatapoints,
 }) => (
     <BootstrapTable
-        keyField="id"
+        keyField="x"
         data={ibmdatapoints}
         columns={getColumns()}
         classes="table-sm"
@@ -19,8 +19,13 @@ export const DataTable: FC<Props> = ({
 const getColumns = (
 ): ColumnDescription[] => [
     {
-        dataField: 'dp',
-        text: 'Code',
+        dataField: 'x',
+        text: 'date',
+        align: 'right',
+    },
+    {
+        dataField: 'y',
+        text: 'stockprice',
         align: 'right',
     },
 ]

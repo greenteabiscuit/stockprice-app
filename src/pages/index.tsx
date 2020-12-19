@@ -1,3 +1,4 @@
+import { HorizontalGridLines, LineSeries, VerticalGridLines, XAxis, XYPlot, YAxis } from "react-vis";
 // React と NextPage を読み込む
 import React, {useState} from 'react'
 import axios, { AxiosInstance } from 'axios'
@@ -10,12 +11,17 @@ import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
   type datagraph = {
-    id: String
-    dp: Number
+    x: String
+    y: Number
+  }
+  interface DataTypes {
+    x: Number;
+    y: Number;
   }
   const alphaVantData : datagraph[] = []
   const [showDownloadAPIDataSuccessAlert, setDownloadAPIDataSuccessAlert] = useState(false)
   const [dataForTable, setDataForTable] = useState<datagraph[]>([])
+  const [dataReactVis, setDataReactVis] = useState<DataTypes[]>([])
   
   const getData = async (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("inside getdata")
@@ -29,7 +35,7 @@ const Home: NextPage = () => {
       const response = await instance.get('/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=' + process.env.APIKEY)    
       const weekly_data: Object[] = response.data['Weekly Time Series']
       Object.keys(weekly_data).map((key) => (
-        alphaVantData.push({id:key, dp:weekly_data[key]['2. high']})
+        alphaVantData.push({x:key, y:weekly_data[key]['2. high']})
       ))
       console.log("ibm data")
       console.log(ibmdata)
@@ -37,6 +43,12 @@ const Home: NextPage = () => {
       console.log(alphaVantData)
       setDownloadAPIDataSuccessAlert(true)
       setDataForTable(alphaVantData)
+      const randomdata: DataTypes[] = []
+      Object.keys(weekly_data).map((value, key) => (
+        randomdata.push({x:key, y:weekly_data[value]['2. high']})
+      ))
+      console.log(randomdata.slice(1, 100))
+      setDataReactVis(randomdata.slice(1, 20))
     } catch (error) {
       console.log(error)
     }
@@ -55,6 +67,13 @@ const Home: NextPage = () => {
           Get started bdfasdfsy editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
+        <XYPlot width={800} height={400}>
+          <VerticalGridLines />
+          <HorizontalGridLines />
+          <XAxis />
+          <YAxis />
+          <LineSeries data={dataReactVis} />
+        </XYPlot>
         <DataTable
           ibmdatapoints={dataForTable}
         />
