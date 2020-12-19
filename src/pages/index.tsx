@@ -10,12 +10,13 @@ import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
   type datagraph = {
-    id: Number
+    id: String
     dp: Number
   }
   const alphaVantData : datagraph[] = []
   const [showDownloadAPIDataSuccessAlert, setDownloadAPIDataSuccessAlert] = useState(false)
   const [dataForTable, setDataForTable] = useState<datagraph[]>([])
+  
   const getData = async (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("inside getdata")
     let instance: AxiosInstance
@@ -27,12 +28,8 @@ const Home: NextPage = () => {
       const ibmdata: number[] = []
       const response = await instance.get('/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=' + process.env.APIKEY)    
       const weekly_data: Object[] = response.data['Weekly Time Series']
-
       Object.keys(weekly_data).map((key) => (
-        ibmdata.push(weekly_data[key]['2. high'])
-      ))
-      Object.keys(weekly_data).forEach((value, key) => (
-        alphaVantData.push({id:key, dp:weekly_data[value]['2. high']})
+        alphaVantData.push({id:key, dp:weekly_data[key]['2. high']})
       ))
       console.log("ibm data")
       console.log(ibmdata)
@@ -51,7 +48,6 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <input type="submit" onChange={getData} value="hello"/>
         <button onClick={getData}>
           Get IBM Data
         </button>
