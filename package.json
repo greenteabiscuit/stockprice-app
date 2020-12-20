@@ -14,7 +14,9 @@
     "next-pwa": "^3.1.5",
     "react": "17.0.1",
     "react-bootstrap": "^1.4.0",
-    "react-dom": "17.0.1"
+    "react-bootstrap-table-next": "^4.0.3",
+    "react-dom": "17.0.1",
+    "react-vis": "^1.11.7"
   },
   "devDependencies": {
     "@types/node": "^14.14.10",

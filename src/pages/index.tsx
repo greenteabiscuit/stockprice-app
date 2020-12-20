@@ -1,14 +1,30 @@
+import '../../node_modules/react-vis/dist/style.css';
+
+import { HorizontalGridLines, LineSeries, VerticalGridLines, XAxis, XYPlot, YAxis } from "react-vis";
 // React と NextPage を読み込む
 import React, {useState} from 'react'
 import axios, { AxiosInstance } from 'axios'
 
 import { Alert } from 'react-bootstrap'
+import { DataTable } from '../../components/dataTable'
 import Head from 'next/head'
 import { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
+  type datagraph = {
+    x: String
+    y: Number
+  }
+  interface DataTypes {
+    x: String;
+    y: Number;
+  }
+  const alphaVantData : datagraph[] = []
   const [showDownloadAPIDataSuccessAlert, setDownloadAPIDataSuccessAlert] = useState(false)
+  const [dataForTable, setDataForTable] = useState<datagraph[]>([])
+  const [dataReactVis, setDataReactVis] = useState<DataTypes[]>([])
+  
   const getData = async (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("inside getdata")
     let instance: AxiosInstance
@@ -17,13 +33,23 @@ const Home: NextPage = () => {
     })
   
     try {
-      const response = await instance.get('/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=' + process.env.APIKEY)
-      console.log(response)
-      console.log(response.data.bestMatches[0])
-      response.data.bestMatches.forEach((element) => {
-        console.log(element['9. matchScore'])
-      })
+      const ibmdata: number[] = []
+      const response = await instance.get('/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=' + process.env.APIKEY)    
+      const weekly_data: Object[] = response.data['Weekly Time Series']
+      Object.keys(weekly_data).map((key) => (
+        alphaVantData.push({x:key, y:weekly_data[key]['2. high']})
+      ))
+      console.log("ibm data")
+      console.log(ibmdata)
+      console.log(ibmdata.length)
+      console.log(alphaVantData)
       setDownloadAPIDataSuccessAlert(true)
+      setDataForTable(alphaVantData.slice(1, 10))
+      const randomdata: DataTypes[] = []
+      Object.keys(weekly_data).map((key) => (
+        randomdata.push({x:key, y:weekly_data[key]['2. high']})
+      ))
+      setDataReactVis(randomdata.slice(1, 10).reverse())
     } catch (error) {
       console.log(error)
     }
@@ -35,14 +61,21 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <input type="submit" onChange={getData} value="hello"/>
         <button onClick={getData}>
-          Activate
+          Get IBM Data
         </button>
-        <p className={styles.description}>
-          Get started bdfasdfsy editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+        <XYPlot width={800} height={400} xType="ordinal">
+          <VerticalGridLines />
+          <HorizontalGridLines />
+          <XAxis tickLabelAngle={-30} style={{ticks: {fontSize: '10px', fontFamily: 'sans-serif'}}}/>
+          <YAxis />
+          <LineSeries data={dataReactVis} style={{ fill: 'none' }}/>
+        </XYPlot>
+        <h2>Data For Table</h2>
+        <DataTable
+          ibmdatapoints={dataForTable}
+        />
+
         <Alert
           variant="success"
           show={showDownloadAPIDataSuccessAlert}
