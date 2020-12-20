@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   const [dataForTable, setDataForTable] = useState<datagraph[]>([])
   const [dataReactVis, setDataReactVis] = useState<DataTypes[]>([])
   
-  const getData = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const getData = async () => {
     console.log("inside getdata")
     let instance: AxiosInstance
     instance = axios.create({
